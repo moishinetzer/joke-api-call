@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import Joke from "./Joke";
+import JokeButton from "./JokeButton"
+import {useState, useEffect} from "react";
+import axios from "axios";
 
 function App() {
+
+  const [jokeUrl, setJokeUrl] = useState("https://official-joke-api.appspot.com/jokes/general/random")
+  const [joke, setJoke] = useState([]);
+  const [jokeCount, setJokeCount] = useState(1);
+
+  useEffect(() => {
+    axios.get(jokeUrl)
+      .then(res => {
+        setJoke(res.data[0]);
+        console.log(res.data)
+        console.log(jokeUrl)
+      })
+  }, [jokeCount, jokeUrl])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1 style={{marginLeft: "20%"}}>Yo API Calls</h1>
+      <Joke joke={joke} />
+
+      <JokeButton setJokeUrl={setJokeUrl} category={"general"}  jokeCount={jokeCount} setJokeCount={setJokeCount}/>
+      <JokeButton setJokeUrl={setJokeUrl} category={"knock-knock"} jokeCount={jokeCount} setJokeCount={setJokeCount}/>
+      <JokeButton setJokeUrl={setJokeUrl} category={"programming"} jokeCount={jokeCount} setJokeCount={setJokeCount}/>
+    </>
   );
 }
 
